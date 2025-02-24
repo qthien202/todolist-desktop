@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:app_todolist_desktop/features/todolist/data/data_soures/todolist_local_data_source.dart';
 import 'package:app_todolist_desktop/features/todolist/data/models/job.dart';
 import 'package:path/path.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class TodolistLocalDataSourceImpl implements TodolistLocalDataSource {
