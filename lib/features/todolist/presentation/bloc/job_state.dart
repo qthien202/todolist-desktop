@@ -13,6 +13,8 @@ class JobSuccess extends JobState {
   const JobSuccess({required this.jobs});
 }
 
+class JobIsEmpty extends JobState {}
+
 class JobError extends JobState {
   final String message;
   const JobError({required this.message});
