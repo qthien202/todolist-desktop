@@ -1,15 +1,9 @@
 import 'package:app_todolist_desktop/core/dependency_injections.dart';
-import 'package:app_todolist_desktop/features/todolist/data/data_sources/todolist_local_data_source.dart';
-import 'package:app_todolist_desktop/features/todolist/data/data_sources/todolist_local_data_source_impl.dart';
-import 'package:app_todolist_desktop/features/todolist/data/repositories/todolist_repository_impl.dart';
 import 'package:app_todolist_desktop/features/todolist/domain/repositories/todolist_repository.dart';
-import 'package:app_todolist_desktop/features/todolist/domain/usecases/add_job_usecase.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_bloc.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 
 import 'features/todolist/domain/usecases/job_usecases.dart';
 
@@ -32,6 +26,11 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               create: (context) => JobBloc(
                     getJobsUsecase: GetJobsUsecase(sl<TodolistRepository>()),
+                    addJobUsecase: AddJobUsecase(sl<TodolistRepository>()),
+                    deleteJobUsecase:
+                        DeleteJobByIdUsecase(sl<TodolistRepository>()),
+                    updateJobUsecase:
+                        UpdateJobByIdUsecase(sl<TodolistRepository>()),
                   )),
         ],
         child: MaterialApp(
