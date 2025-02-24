@@ -1,8 +1,8 @@
-import 'package:app_todolist_desktop/features/todolist/data/data_soures/todolist_local_data_source.dart';
 import 'package:app_todolist_desktop/features/todolist/data/models/job.dart';
 import 'package:app_todolist_desktop/features/todolist/domain/repositories/todolist_repository.dart';
 
 import '../../domain/entities/job_entity.dart';
+import '../data_soures/data_source.dart';
 
 class TodolistRepositoryImpl implements TodolistRepository {
   final TodolistLocalDataSource todolistLocalDataSource;
