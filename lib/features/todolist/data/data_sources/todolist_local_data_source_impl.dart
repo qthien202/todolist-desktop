@@ -14,10 +14,11 @@ class TodolistLocalDataSourceImpl implements TodolistLocalDataSource {
     final inMemoryDatabasePath = '$dbPath/$databaseName';
     _db = await databaseFactory.openDatabase(inMemoryDatabasePath);
     await _db?.execute('''
-      CREATE TABLE $tableName(
-        id TEXT PRIMARY KEY,
+      CREATE TABLE IF NOT EXISTS $tableName(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
-        isDone BOOLEAN
+        status TEXT,
+        priority TEXT
       )
     ''');
     return _db!;
@@ -26,7 +27,11 @@ class TodolistLocalDataSourceImpl implements TodolistLocalDataSource {
   @override
   Future<void> addJob(JobModel job) async {
     final db = await database;
-    await db.insert(tableName, job.toJson());
+    await db.insert(
+      tableName,
+      job.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   @override

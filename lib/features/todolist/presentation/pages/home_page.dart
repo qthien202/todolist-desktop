@@ -1,6 +1,7 @@
 import 'package:app_todolist_desktop/features/todolist/domain/entities/job_entity.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_bloc.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_state.dart';
+import 'package:app_todolist_desktop/features/todolist/presentation/pages/add_job_dialog.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/widgets/job_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,16 @@ class HomePage extends StatelessWidget {
             backgroundColor: Colors.white,
             title: Text("Ứng dụng TodoList"),
             actions: [
-              ElevatedButton(onPressed: () {}, child: Text("Thêm công việc")),
+              ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(Colors.blue),
+                  ),
+                  onPressed: () async =>
+                      await showAddJobDialog(context: context),
+                  child: Text(
+                    "Thêm công việc",
+                    style: TextStyle(color: Colors.white),
+                  )),
             ],
           ),
           SliverToBoxAdapter(
@@ -57,9 +67,15 @@ class HomePage extends StatelessWidget {
                   );
                 }
                 jobs = state is JobSuccess ? state.jobs : [];
-                return ListView.builder(
+                return GridView.builder(
                   shrinkWrap: true,
                   itemCount: jobs.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      // childAspectRatio: 1.5,
+                      crossAxisSpacing: 10,
+                      // mainAxisExtent: 10,
+                      // mainAxisSpacing: 5,
+                      crossAxisCount: 5),
                   itemBuilder: (context, index) {
                     return jobWidget(jobs[index]);
                   },

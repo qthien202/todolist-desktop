@@ -2,18 +2,20 @@ import 'package:equatable/equatable.dart';
 
 enum JobPriority { low, medium, high }
 
+enum JobStatus { todo, done }
+
 class JobEntity extends Equatable {
-  final String id;
+  final int? id;
   final String name;
-  final bool isDone;
-  final JobPriority priority;
+  final String status;
+  final String priority;
 
   const JobEntity(
       {required this.id,
       required this.name,
-      this.isDone = false,
-      this.priority = JobPriority.low});
+      this.status = "todo",
+      this.priority = "low"});
 
   @override
-  List get props => [id, name];
+  List get props => [id, name, status, priority];
 }

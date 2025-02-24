@@ -13,8 +13,8 @@ Widget jobWidget(JobEntity job) {
           job.name,
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
-        Text(job.isDone ? 'Done' : 'Not done'),
-        Text(job.priority.toString()),
+        Text(job.status),
+        Text(job.priority),
       ],
     ),
   );
