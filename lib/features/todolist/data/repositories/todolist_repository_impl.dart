@@ -9,23 +9,23 @@ class TodolistRepositoryImpl implements TodolistRepository {
   TodolistRepositoryImpl(this.todolistLocalDataSource);
 
   @override
-  Future<void> addTodo(JobEntity job) async =>
-      await todolistLocalDataSource.addTodo(JobModel.fromEntity(job));
+  Future<void> addJob(JobEntity job) async =>
+      await todolistLocalDataSource.addJob(JobModel.fromEntity(job));
 
   @override
-  Future<List<JobEntity>> getTodos() async {
+  Future<List<JobEntity>> getJobs() async {
     return await todolistLocalDataSource
-        .getTodos()
+        .getJobs()
         .then((value) => value.map((e) => e).toList());
   }
 
   @override
-  Future<void> updateTodoById(String id, JobEntity job) async {
-    return await todolistLocalDataSource.updateTodoById(
+  Future<void> updateJobById(String id, JobEntity job) async {
+    return await todolistLocalDataSource.updateJobById(
         id, JobModel.fromEntity(job));
   }
 
   @override
-  Future<void> deleteTodoById(String id) async =>
-      await todolistLocalDataSource.deleteTodoById(id);
+  Future<void> deleteJobById(String id) async =>
+      await todolistLocalDataSource.deleteJobById(id);
 }
