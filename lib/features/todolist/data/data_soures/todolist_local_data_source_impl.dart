@@ -14,7 +14,7 @@ class TodolistLocalDataSourceImpl implements TodolistLocalDataSource {
       join(await getDatabasesPath(), databaseName),
       onCreate: (db, version) {
         return db.execute(
-          "CREATE TABLE $tableName(id TEXT PRIMARY KEY, name TEXT)",
+          "CREATE TABLE $tableName(id TEXT PRIMARY KEY, name TEXT, isDone BOOLEAN)",
         );
       },
     );

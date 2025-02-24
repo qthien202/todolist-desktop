@@ -1,9 +1,9 @@
 import '../entities/job_entity.dart';
 import '../repositories/todolist_repository.dart';
 
-class UpdateJobById {
+class UpdateJobByIdUsecase {
   final TodolistRepository repository;
-  UpdateJobById(this.repository);
+  UpdateJobByIdUsecase(this.repository);
   Future<void> call(String id, JobEntity job) async =>
       await repository.updateJobById(id, job);
 }
