@@ -10,4 +10,11 @@ class JobModel extends JobEntity {
   factory JobModel.fromEntity(JobEntity entity) {
     return JobModel(id: entity.id, name: entity.name);
   }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['id'] = id;
+    map['name'] = name;
+    return map;
+  }
 }

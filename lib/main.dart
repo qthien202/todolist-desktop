@@ -1,7 +1,11 @@
 import 'package:app_todolist_desktop/features/todolist/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
 }
 
