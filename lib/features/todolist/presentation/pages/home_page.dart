@@ -20,16 +20,19 @@ class HomePage extends StatelessWidget {
             backgroundColor: Colors.white,
             title: Text("Ứng dụng TodoList"),
             actions: [
-              ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(Colors.blue),
-                  ),
-                  onPressed: () async =>
-                      await showAddJobDialog(context: context),
-                  child: Text(
-                    "Thêm công việc",
-                    style: TextStyle(color: Colors.white),
-                  )),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all(Colors.blue),
+                    ),
+                    onPressed: () async =>
+                        await showAddJobDialog(context: context),
+                    child: Text(
+                      "Thêm công việc",
+                      style: TextStyle(color: Colors.white),
+                    )),
+              ),
             ],
           ),
           SliverToBoxAdapter(
@@ -68,16 +71,17 @@ class HomePage extends StatelessWidget {
                 }
                 jobs = state is JobSuccess ? state.jobs : [];
                 return GridView.builder(
+                  padding: EdgeInsets.all(8),
                   shrinkWrap: true,
                   itemCount: jobs.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      // childAspectRatio: 1.5,
+                      childAspectRatio: 10 / 4,
                       crossAxisSpacing: 10,
                       // mainAxisExtent: 10,
-                      // mainAxisSpacing: 5,
+                      mainAxisSpacing: 10,
                       crossAxisCount: 5),
                   itemBuilder: (context, index) {
-                    return jobWidget(jobs[index]);
+                    return jobWidget(jobs[index], context);
                   },
                 );
               },

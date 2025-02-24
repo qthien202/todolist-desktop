@@ -11,40 +11,54 @@ Widget addJobDialog(
     required TextEditingController nameController,
     required JobStatus selectedStatus,
     required JobPriority selectedPriority}) {
+  final formKey = GlobalKey<FormState>();
   return AlertDialog(
     title: Text("Thêm công việc"),
-    content: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        TextField(
-          controller: nameController,
-          decoration: InputDecoration(labelText: "Tên công việc"),
-        ),
-        SizedBox(height: 10),
-        DropdownButtonFormField<JobStatus>(
-          value: selectedStatus,
-          decoration: InputDecoration(labelText: "Trạng thái"),
-          items: JobStatus.values
-              .map((status) =>
-                  DropdownMenuItem(value: status, child: Text(status.name)))
-              .toList(),
-          onChanged: (value) {
-            if (value != null) selectedStatus = value;
-          },
-        ),
-        SizedBox(height: 10),
-        DropdownButtonFormField<JobPriority>(
-          value: selectedPriority,
-          decoration: InputDecoration(labelText: "priority"),
-          items: JobPriority.values
-              .map((priority) =>
-                  DropdownMenuItem(value: priority, child: Text(priority.name)))
-              .toList(),
-          onChanged: (value) {
-            if (value != null) selectedPriority = value;
-          },
-        ),
-      ],
+    content: Form(
+      key: formKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextFormField(
+            validator: (value) {
+              String val = value ?? "";
+              if (val.isEmpty) {
+                return "Vui lòng nhập tên công việc";
+              }
+              if (val.length < 5) {
+                return "Tên công việc bắt đầu từ 5 kí tự trở lên";
+              }
+              return null;
+            },
+            controller: nameController,
+            decoration: InputDecoration(labelText: "Tên công việc"),
+          ),
+          SizedBox(height: 10),
+          DropdownButtonFormField<JobStatus>(
+            value: selectedStatus,
+            decoration: InputDecoration(labelText: "Trạng thái"),
+            items: JobStatus.values
+                .map((status) =>
+                    DropdownMenuItem(value: status, child: Text(status.name)))
+                .toList(),
+            onChanged: (value) {
+              if (value != null) selectedStatus = value;
+            },
+          ),
+          SizedBox(height: 10),
+          DropdownButtonFormField<JobPriority>(
+            value: selectedPriority,
+            decoration: InputDecoration(labelText: "priority"),
+            items: JobPriority.values
+                .map((priority) => DropdownMenuItem(
+                    value: priority, child: Text(priority.name)))
+                .toList(),
+            onChanged: (value) {
+              if (value != null) selectedPriority = value;
+            },
+          ),
+        ],
+      ),
     ),
     actions: [
       // Nút Hủy
@@ -55,12 +69,14 @@ Widget addJobDialog(
       // Nút Lưu
       ElevatedButton(
         onPressed: () {
-          context.read<JobBloc>().add(AddJobEvent(
-              job: JobModel(
-                  name: nameController.text,
-                  status: selectedStatus.name,
-                  priority: selectedPriority.name)));
-          Navigator.pop(context);
+          if (formKey.currentState?.validate() == true) {
+            context.read<JobBloc>().add(AddJobEvent(
+                job: JobModel(
+                    name: nameController.text,
+                    status: selectedStatus.name,
+                    priority: selectedPriority.name)));
+            Navigator.pop(context);
+          }
         },
         child: Text("Lưu"),
       ),
@@ -68,12 +84,28 @@ Widget addJobDialog(
   );
 }
 
-Future<void> showAddJobDialog({
-  required BuildContext context,
-}) async {
+Map<String, dynamic> statusMap = {
+  'todo': JobStatus.todo,
+  'inProgress': JobStatus.inProgress,
+  'pending': JobStatus.pending,
+  'done': JobStatus.done
+};
+
+Map<String, dynamic> priorityMap = {
+  'low': JobPriority.low,
+  'medium': JobPriority.medium,
+  'high': JobPriority.high
+};
+Future<void> showAddJobDialog(
+    {required BuildContext context,
+    String? name,
+    String? status,
+    String? priority}) async {
   final TextEditingController nameController = TextEditingController();
-  final selectedStatus = JobStatus.todo;
-  final selectedPriority = JobPriority.low;
+  nameController.text = name ?? "";
+  final selectedStatus = status != null ? statusMap[status] : JobStatus.todo;
+  final selectedPriority =
+      priority != null ? priorityMap[priority] : JobPriority.low;
   return await showDialog(
     context: context,
     builder: (context) {
