@@ -1,4 +1,4 @@
-import 'package:app_todolist_desktop/features/todolist/data/data_soures/todolist_local_data_source.dart';
+import 'package:app_todolist_desktop/features/todolist/data/data_sources/todolist_local_data_source.dart';
 import 'package:app_todolist_desktop/features/todolist/data/models/job.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';

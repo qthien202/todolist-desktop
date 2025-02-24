@@ -1,6 +1,6 @@
 import 'package:app_todolist_desktop/core/dependency_injections.dart';
-import 'package:app_todolist_desktop/features/todolist/data/data_soures/todolist_local_data_source.dart';
-import 'package:app_todolist_desktop/features/todolist/data/data_soures/todolist_local_data_source_impl.dart';
+import 'package:app_todolist_desktop/features/todolist/data/data_sources/todolist_local_data_source.dart';
+import 'package:app_todolist_desktop/features/todolist/data/data_sources/todolist_local_data_source_impl.dart';
 import 'package:app_todolist_desktop/features/todolist/data/repositories/todolist_repository_impl.dart';
 import 'package:app_todolist_desktop/features/todolist/domain/repositories/todolist_repository.dart';
 import 'package:app_todolist_desktop/features/todolist/domain/usecases/add_job_usecase.dart';
