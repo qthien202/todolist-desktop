@@ -1,8 +1,8 @@
 import 'package:app_todolist_desktop/features/todolist/data/models/job.dart';
 
 abstract class TodolistLocalDataSource {
-  Future<List<JobModel>> getTodos();
-  Future<void> addTodo(JobModel job);
-  Future<void> deleteTodoById(String id);
-  Future<void> updateTodoById(String id, JobModel job);
+  Future<List<JobModel>> getJobs();
+  Future<void> addJob(JobModel job);
+  Future<void> deleteJobById(String id);
+  Future<void> updateJobById(String id, JobModel job);
 }

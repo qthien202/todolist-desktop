@@ -25,13 +25,13 @@ class TodolistLocalDataSourceImpl implements TodolistLocalDataSource {
   }
 
   @override
-  Future<void> addTodo(JobModel job) async {
+  Future<void> addJob(JobModel job) async {
     final db = await database;
     await db.insert(tableName, job.toJson());
   }
 
   @override
-  Future<List<JobModel>> getTodos() async {
+  Future<List<JobModel>> getJobs() async {
     final db = await database;
     var res = await db.query(tableName);
     List<JobModel> jobs = res.map((e) => JobModel.fromJson(e)).toList();
@@ -39,13 +39,13 @@ class TodolistLocalDataSourceImpl implements TodolistLocalDataSource {
   }
 
   @override
-  Future<void> updateTodoById(String id, JobModel job) async {
+  Future<void> updateJobById(String id, JobModel job) async {
     final db = await database;
     await db.update(tableName, job.toJson(), where: 'id = ?', whereArgs: [id]);
   }
 
   @override
-  Future<void> deleteTodoById(String id) async {
+  Future<void> deleteJobById(String id) async {
     final db = await database;
     await db.delete(tableName, where: 'id = ?', whereArgs: [id]);
   }
