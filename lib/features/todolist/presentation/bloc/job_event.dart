@@ -13,6 +13,11 @@ class GetJobsEvent extends JobEvent {
   GetJobsEvent();
 }
 
+class GetJobByStatusEvent extends JobEvent {
+  final String status;
+  GetJobByStatusEvent({required this.status});
+}
+
 class UpdateJobEvent extends JobEvent {
   final int id;
   final JobEntity job;

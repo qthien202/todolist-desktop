@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:app_todolist_desktop/features/todolist/domain/usecases/get_job_by_status_usecase.dart';
 import 'package:app_todolist_desktop/features/todolist/domain/usecases/job_usecases.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_event.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_state.dart';
@@ -10,16 +11,20 @@ class JobBloc extends Bloc<JobEvent, JobState> {
   final GetJobsUsecase getJobsUsecase;
   final UpdateJobByIdUsecase updateJobUsecase;
   final DeleteJobByIdUsecase deleteJobUsecase;
-  JobBloc({
-    required this.addJobUsecase,
-    required this.getJobsUsecase,
-    required this.updateJobUsecase,
-    required this.deleteJobUsecase,
-  }) : super(JobInit()) {
+  final GetJobByStatusUseCase getJobByStatusUseCase;
+  JobBloc(
+      {required this.addJobUsecase,
+      required this.getJobsUsecase,
+      required this.updateJobUsecase,
+      required this.deleteJobUsecase,
+      required this.getJobByStatusUseCase})
+      : super(JobInit()) {
     on<AddJobEvent>((event, emit) => addJob(event, emit));
     on<GetJobsEvent>((event, emit) => getJobs(emit));
     on<UpdateJobEvent>((event, emit) => updateJob(event, emit));
     on<DeleteJobByIdEvent>((event, emit) => deleteJob(event.id, emit));
+    on<GetJobByStatusEvent>(
+        (event, emit) => getJobByStatus(event.status, emit));
   }
 
   Future<void> addJob(AddJobEvent event, Emitter<JobState> emit) async {
@@ -36,6 +41,21 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     emit(JobLoading());
     try {
       final jobs = await getJobsUsecase();
+
+      if (jobs.isEmpty) {
+        emit(JobIsEmpty());
+        return;
+      }
+      emit(JobSuccess(jobs: jobs));
+    } catch (e) {
+      emit(JobError(message: e.toString()));
+    }
+  }
+
+  Future<void> getJobByStatus(String status, Emitter<JobState> emit) async {
+    emit(JobLoading());
+    try {
+      final jobs = await getJobByStatusUseCase(status);
 
       if (jobs.isEmpty) {
         emit(JobIsEmpty());

@@ -1,5 +1,6 @@
 import 'package:app_todolist_desktop/core/dependency_injections.dart';
 import 'package:app_todolist_desktop/features/todolist/domain/repositories/todolist_repository.dart';
+import 'package:app_todolist_desktop/features/todolist/domain/usecases/get_job_by_status_usecase.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_bloc.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
@@ -28,13 +29,15 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(
               create: (context) => JobBloc(
-                    getJobsUsecase: GetJobsUsecase(sl<TodolistRepository>()),
-                    addJobUsecase: AddJobUsecase(sl<TodolistRepository>()),
-                    deleteJobUsecase:
-                        DeleteJobByIdUsecase(sl<TodolistRepository>()),
-                    updateJobUsecase:
-                        UpdateJobByIdUsecase(sl<TodolistRepository>()),
-                  )..add(GetJobsEvent())),
+                  getJobsUsecase: GetJobsUsecase(sl<TodolistRepository>()),
+                  addJobUsecase: AddJobUsecase(sl<TodolistRepository>()),
+                  deleteJobUsecase:
+                      DeleteJobByIdUsecase(sl<TodolistRepository>()),
+                  updateJobUsecase:
+                      UpdateJobByIdUsecase(sl<TodolistRepository>()),
+                  getJobByStatusUseCase:
+                      GetJobByStatusUseCase(sl<TodolistRepository>()))
+                ..add(GetJobsEvent())),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
