@@ -43,6 +43,14 @@ class TodolistLocalDataSourceImpl implements TodolistLocalDataSource {
   }
 
   @override
+  Future<List<JobModel>> getJobByStatus(String status) async {
+    final db = await database;
+    var res = await db.query(tableName, where: 'status=?', whereArgs: [status]);
+    List<JobModel> jobs = res.map((e) => JobModel.fromJson(e)).toList();
+    return jobs;
+  }
+
+  @override
   Future<void> updateJobById(int id, JobModel job) async {
     final db = await database;
     await db.update(tableName, job.toJson(), where: 'id = ?', whereArgs: [id]);

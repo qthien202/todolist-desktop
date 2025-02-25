@@ -49,7 +49,7 @@ Widget addJobDialog(
           SizedBox(height: 10),
           DropdownButtonFormField<JobPriority>(
             value: selectedPriority,
-            decoration: InputDecoration(labelText: "priority"),
+            decoration: InputDecoration(labelText: "Độ ưu tiên"),
             items: JobPriority.values
                 .map((priority) => DropdownMenuItem(
                     value: priority,

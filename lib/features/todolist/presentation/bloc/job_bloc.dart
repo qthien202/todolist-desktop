@@ -36,7 +36,7 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     emit(JobLoading());
     try {
       final jobs = await getJobsUsecase();
-      print(">>>>>>>>jobs: $jobs");
+
       if (jobs.isEmpty) {
         emit(JobIsEmpty());
         return;

@@ -1,3 +1,4 @@
+import 'package:app_todolist_desktop/core/app_colors.dart';
 import 'package:app_todolist_desktop/features/todolist/domain/entities/job_entity.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_bloc.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_event.dart';
@@ -20,6 +21,14 @@ Widget jobWidget(JobEntity job, BuildContext context) {
     'medium': 'Bình thường',
     'high': 'Cao'
   };
+
+  // ignore: unused_local_variable
+  Map<String, Color> priorityColor = {
+    'low': AppColors.low,
+    'medium': AppColors.medium,
+    'high': AppColors.high
+  };
+
   return Container(
     decoration: BoxDecoration(
       border: Border.all(color: Colors.grey.shade200),
@@ -28,6 +37,7 @@ Widget jobWidget(JobEntity job, BuildContext context) {
     child: Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
@@ -57,13 +67,25 @@ Widget jobWidget(JobEntity job, BuildContext context) {
                               Navigator.pop(context);
                             }),
                           ),
-                      child: Icon(Icons.delete))
+                      child: Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ))
                 ],
               )
             ],
           ),
-          Text(statusMap[job.status]),
-          Text(priorityMap[job.priority]),
+          // Text(statusMap[job.status]),
+          Container(
+              // alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: priorityColor[job.priority]),
+              child: Text(
+                "${priorityMap[job.priority]}",
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              )),
         ],
       ),
     ),
