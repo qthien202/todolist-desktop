@@ -20,6 +20,13 @@ class TodolistRepositoryImpl implements TodolistRepository {
   }
 
   @override
+  Future<List<JobEntity>> getJobByStatus(String status) async {
+    return await todolistLocalDataSource
+        .getJobByStatus(status)
+        .then((value) => value.map((e) => e).toList());
+  }
+
+  @override
   Future<void> updateJobById(int id, JobEntity job) async {
     return await todolistLocalDataSource.updateJobById(
         id, JobModel.fromEntity(job));
