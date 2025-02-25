@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:app_todolist_desktop/features/todolist/domain/usecases/job_usecases.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_event.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_state.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class JobBloc extends Bloc<JobEvent, JobState> {
@@ -37,9 +36,7 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     emit(JobLoading());
     try {
       final jobs = await getJobsUsecase();
-      if (kDebugMode) {
-        print(">>>>>>>>jobs: $jobs");
-      }
+      print(">>>>>>>>jobs: $jobs");
       if (jobs.isEmpty) {
         emit(JobIsEmpty());
         return;

@@ -20,7 +20,7 @@ class TodolistRepositoryImpl implements TodolistRepository {
   }
 
   @override
-  Future<void> updateJobById(String id, JobEntity job) async {
+  Future<void> updateJobById(int id, JobEntity job) async {
     return await todolistLocalDataSource.updateJobById(
         id, JobModel.fromEntity(job));
   }

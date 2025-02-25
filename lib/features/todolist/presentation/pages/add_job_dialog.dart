@@ -10,7 +10,8 @@ Widget addJobDialog(
     {required BuildContext context,
     required TextEditingController nameController,
     required JobStatus selectedStatus,
-    required JobPriority selectedPriority}) {
+    required JobPriority selectedPriority,
+    int? id}) {
   final formKey = GlobalKey<FormState>();
   return AlertDialog(
     title: Text("Thêm công việc"),
@@ -38,8 +39,8 @@ Widget addJobDialog(
             value: selectedStatus,
             decoration: InputDecoration(labelText: "Trạng thái"),
             items: JobStatus.values
-                .map((status) =>
-                    DropdownMenuItem(value: status, child: Text(status.name)))
+                .map((status) => DropdownMenuItem(
+                    value: status, child: Text(statusMapText[status.name])))
                 .toList(),
             onChanged: (value) {
               if (value != null) selectedStatus = value;
@@ -51,7 +52,8 @@ Widget addJobDialog(
             decoration: InputDecoration(labelText: "priority"),
             items: JobPriority.values
                 .map((priority) => DropdownMenuItem(
-                    value: priority, child: Text(priority.name)))
+                    value: priority,
+                    child: Text(priorityMapText[priority.name])))
                 .toList(),
             onChanged: (value) {
               if (value != null) selectedPriority = value;
@@ -69,13 +71,23 @@ Widget addJobDialog(
       // Nút Lưu
       ElevatedButton(
         onPressed: () {
+          print(">>>>>>>>id: $id");
           if (formKey.currentState?.validate() == true) {
-            context.read<JobBloc>().add(AddJobEvent(
-                job: JobModel(
-                    name: nameController.text,
-                    status: selectedStatus.name,
-                    priority: selectedPriority.name)));
-            Navigator.pop(context);
+            if (id != null) {
+              final newJob = JobModel(
+                  id: id,
+                  name: nameController.text,
+                  status: selectedStatus.name,
+                  priority: selectedPriority.name);
+              context.read<JobBloc>().add(UpdateJobEvent(job: newJob, id: id));
+              Navigator.pop(context);
+            }
+            // context.read<JobBloc>().add(AddJobEvent(
+            //     job: JobModel(
+            //         name: nameController.text,
+            //         status: selectedStatus.name,
+            //         priority: selectedPriority.name)));
+            // Navigator.pop(context);
           }
         },
         child: Text("Lưu"),
@@ -83,6 +95,19 @@ Widget addJobDialog(
     ],
   );
 }
+
+Map<String, dynamic> statusMapText = {
+  'todo': 'Chưa thực hiện',
+  'inProgress': 'Đang thực hiện',
+  'pending': 'Tạm dừng',
+  'done': 'Hoàn thành'
+};
+
+Map<String, dynamic> priorityMapText = {
+  'low': 'Thấp',
+  'medium': 'Bình thường',
+  'high': 'Cao'
+};
 
 Map<String, dynamic> statusMap = {
   'todo': JobStatus.todo,
@@ -98,23 +123,23 @@ Map<String, dynamic> priorityMap = {
 };
 Future<void> showAddJobDialog(
     {required BuildContext context,
-    String? name,
-    String? status,
-    String? priority}) async {
+    JobEntity? job,
+    bool isEdit = false}) async {
   final TextEditingController nameController = TextEditingController();
-  nameController.text = name ?? "";
-  final selectedStatus = status != null ? statusMap[status] : JobStatus.todo;
+  nameController.text = job?.name ?? "";
+  final selectedStatus =
+      job?.status != null ? statusMap[job?.status] : JobStatus.todo;
   final selectedPriority =
-      priority != null ? priorityMap[priority] : JobPriority.low;
+      job?.priority != null ? priorityMap[job?.priority] : JobPriority.low;
   return await showDialog(
     context: context,
     builder: (context) {
       return addJobDialog(
-        context: context,
-        nameController: nameController,
-        selectedStatus: selectedStatus,
-        selectedPriority: selectedPriority,
-      );
+          context: context,
+          nameController: nameController,
+          selectedStatus: selectedStatus,
+          selectedPriority: selectedPriority,
+          id: isEdit ? job?.id : null);
     },
   );
 }

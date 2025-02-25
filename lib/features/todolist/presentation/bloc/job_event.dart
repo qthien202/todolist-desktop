@@ -14,7 +14,7 @@ class GetJobsEvent extends JobEvent {
 }
 
 class UpdateJobEvent extends JobEvent {
-  final String id;
+  final int id;
   final JobEntity job;
   UpdateJobEvent({required this.id, required this.job});
 }

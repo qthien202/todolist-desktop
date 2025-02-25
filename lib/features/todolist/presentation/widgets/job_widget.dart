@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 
 Widget jobWidget(JobEntity job, BuildContext context) {
   Map<String, dynamic> statusMap = {
-    'todo': 'Todo',
-    'inProgress': 'In progess',
-    'pending': 'Pending',
-    'done': 'Done'
+    'todo': 'Chưa thực hiện',
+    'inProgress': 'Đang thực hiện',
+    'pending': 'Tạm dừng',
+    'done': 'Hoàn thành'
   };
 
   Map<String, dynamic> priorityMap = {
-    'low': 'Low',
-    'medium': 'Medium',
-    'high': 'High'
+    'low': 'Thấp',
+    'medium': 'Bình thường',
+    'high': 'Cao'
   };
   return Container(
     decoration: BoxDecoration(
@@ -34,10 +34,7 @@ Widget jobWidget(JobEntity job, BuildContext context) {
               ),
               InkWell(
                   onTap: () => showAddJobDialog(
-                      context: context,
-                      name: job.name,
-                      priority: job.priority,
-                      status: job.status),
+                      context: context, job: job, isEdit: true),
                   child: Icon(Icons.edit_outlined))
             ],
           ),
