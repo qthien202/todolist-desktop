@@ -13,6 +13,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    print(">>>>>>>screenWidth: $screenWidth");
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -65,36 +67,33 @@ class HomePage extends StatelessWidget {
             child: SingleChildScrollView(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                // mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: jobStatusWidget(
-                      status: JobStatus.todo.name,
-                      child: Column(
-                        children: todoJobs.map((job) {
-                          return jobWidget(job, context);
-                        }).toList(),
-                      ),
+                  jobStatusWidget(
+                    context: context,
+                    status: JobStatus.todo.name,
+                    child: Column(
+                      children: todoJobs.map((job) {
+                        return jobWidget(job, context);
+                      }).toList(),
                     ),
                   ),
-                  Expanded(
-                    child: jobStatusWidget(
-                      status: JobStatus.inProgress.name,
-                      child: Column(
-                        children: inProgressJobs.map((job) {
-                          return jobWidget(job, context);
-                        }).toList(),
-                      ),
+                  jobStatusWidget(
+                    context: context,
+                    status: JobStatus.inProgress.name,
+                    child: Column(
+                      children: inProgressJobs.map((job) {
+                        return jobWidget(job, context);
+                      }).toList(),
                     ),
                   ),
-                  Expanded(
-                    child: jobStatusWidget(
-                      status: JobStatus.done.name,
-                      child: Column(
-                        children: doneJobs.map((job) {
-                          return jobWidget(job, context);
-                        }).toList(),
-                      ),
+                  jobStatusWidget(
+                    context: context,
+                    status: JobStatus.done.name,
+                    child: Column(
+                      children: doneJobs.map((job) {
+                        return jobWidget(job, context);
+                      }).toList(),
                     ),
                   )
                 ],

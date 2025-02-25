@@ -4,8 +4,15 @@ import 'package:app_todolist_desktop/features/todolist/presentation/pages/add_jo
 import 'package:app_todolist_desktop/features/todolist/presentation/widgets/confirm_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-Widget jobStatusWidget({required Widget child, required String status}) {
+import '../bloc/job_bloc.dart';
+import '../bloc/job_event.dart';
+
+Widget jobStatusWidget(
+    {required Widget child,
+    required String status,
+    required BuildContext context}) {
   Map<String, Color> badgeColor = {
     'todo': AppColors.todoBadge,
     'inProgress': AppColors.inProgressBadge,
@@ -18,8 +25,9 @@ Widget jobStatusWidget({required Widget child, required String status}) {
   };
 
   return Container(
+    padding: EdgeInsets.all(8),
     decoration: BoxDecoration(
-        color: Colors.white, borderRadius: BorderRadius.circular(8)),
+        color: Colors.grey.shade100, borderRadius: BorderRadius.circular(8)),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -30,7 +38,7 @@ Widget jobStatusWidget({required Widget child, required String status}) {
               borderRadius: BorderRadius.circular(20)),
           child: Text(
             statusTextMap[status],
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
           ),
         ),
         const SizedBox(
@@ -69,7 +77,15 @@ Future<void> showModalJob({
                   Navigator.pop(context);
                   await showCupertinoDialog(
                     context: context,
-                    builder: (context) => confirmDialog(context),
+                    builder: (context) => confirmDialog(
+                      context,
+                      onDelete: () {
+                        context
+                            .read<JobBloc>()
+                            .add(DeleteJobByIdEvent(id: job.id ?? 0));
+                        Navigator.pop(context);
+                      },
+                    ),
                   );
                 },
                 child: const Text(

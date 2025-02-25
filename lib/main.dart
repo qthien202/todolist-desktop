@@ -5,11 +5,16 @@ import 'package:app_todolist_desktop/features/todolist/presentation/pages/home_p
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:window_manager/window_manager.dart';
 import 'features/todolist/domain/usecases/job_usecases.dart';
 import 'features/todolist/presentation/bloc/job_event.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await windowManager.ensureInitialized();
+
+  // Đặt kích thước cửa sổ tối thiểu
+  windowManager.setMinimumSize(const Size(880, 400));
   sqfliteFfiInit();
   initializeDependencies();
 
