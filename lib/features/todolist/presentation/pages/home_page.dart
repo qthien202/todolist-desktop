@@ -2,6 +2,7 @@ import 'package:app_todolist_desktop/features/todolist/domain/entities/job_entit
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_bloc.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_state.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/pages/add_job_dialog.dart';
+import 'package:app_todolist_desktop/features/todolist/presentation/widgets/job_status_widget.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/widgets/job_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -32,22 +33,12 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocConsumer<JobBloc, JobState>(
-        listener: (context, state) {
-          if (kDebugMode) {
-            print(">>>>>>>>state1: $state");
-          }
-          if (state is JobError) {
-            if (kDebugMode) {
-              print(">>>>>>>>error: ${state.message}");
-            }
-          }
-        },
+      body: BlocBuilder<JobBloc, JobState>(
         builder: (context, state) {
           if (kDebugMode) {
             print(">>>>>>>>state2: $state");
           }
-          List<JobEntity> jobs = [];
+
           if (state is JobLoading) {
             return CircularProgressIndicator();
           }
@@ -65,20 +56,50 @@ class HomePage extends StatelessWidget {
               ),
             );
           }
-          jobs = state is JobSuccess ? state.jobs : [];
-          return GridView.builder(
-            padding: EdgeInsets.all(8),
-            shrinkWrap: true,
-            itemCount: jobs.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 10 / 4,
-                crossAxisSpacing: 10,
-                // mainAxisExtent: 10,
-                mainAxisSpacing: 10,
-                crossAxisCount: 5),
-            itemBuilder: (context, index) {
-              return jobWidget(jobs[index], context);
-            },
+          final todoJobs = state is JobMultiStatusSuccess ? state.todoJobs : [];
+          final inProgressJobs =
+              state is JobMultiStatusSuccess ? state.inProgressJobs : [];
+          final doneJobs = state is JobMultiStatusSuccess ? state.doneJobs : [];
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+            child: SingleChildScrollView(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                // mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: jobStatusWidget(
+                      status: JobStatus.todo.name,
+                      child: Column(
+                        children: todoJobs.map((job) {
+                          return jobWidget(job, context);
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: jobStatusWidget(
+                      status: JobStatus.inProgress.name,
+                      child: Column(
+                        children: inProgressJobs.map((job) {
+                          return jobWidget(job, context);
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: jobStatusWidget(
+                      status: JobStatus.done.name,
+                      child: Column(
+                        children: doneJobs.map((job) {
+                          return jobWidget(job, context);
+                        }).toList(),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
           );
         },
       ),

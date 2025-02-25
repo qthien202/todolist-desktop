@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 enum JobPriority { low, medium, high }
 
-enum JobStatus { todo, inProgress, pending, done }
+enum JobStatus { todo, inProgress, done }
 
 class JobEntity extends Equatable {
   final int? id;

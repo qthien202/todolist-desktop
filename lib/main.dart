@@ -1,6 +1,5 @@
 import 'package:app_todolist_desktop/core/dependency_injections.dart';
 import 'package:app_todolist_desktop/features/todolist/domain/repositories/todolist_repository.dart';
-import 'package:app_todolist_desktop/features/todolist/domain/usecases/get_job_by_status_usecase.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_bloc.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
@@ -37,15 +36,17 @@ class MyApp extends StatelessWidget {
                       UpdateJobByIdUsecase(sl<TodolistRepository>()),
                   getJobByStatusUseCase:
                       GetJobByStatusUseCase(sl<TodolistRepository>()))
-                ..add(GetJobsEvent())),
+                ..add(GetJobByMultipleStatusEvent())),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter TodoList Desktop',
           theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            useMaterial3: true,
-          ),
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              useMaterial3: true,
+              appBarTheme: AppBarTheme(
+                scrolledUnderElevation: 0.0,
+              )),
           home: const HomePage(),
         ));
   }

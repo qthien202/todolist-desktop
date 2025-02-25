@@ -23,15 +23,15 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     on<GetJobsEvent>((event, emit) => getJobs(emit));
     on<UpdateJobEvent>((event, emit) => updateJob(event, emit));
     on<DeleteJobByIdEvent>((event, emit) => deleteJob(event.id, emit));
-    on<GetJobByStatusEvent>(
-        (event, emit) => getJobByStatus(event.status, emit));
+    on<GetJobByMultipleStatusEvent>(
+        (event, emit) => getMultipleJobByStatus(emit));
   }
 
   Future<void> addJob(AddJobEvent event, Emitter<JobState> emit) async {
     emit(JobLoading());
     try {
       await addJobUsecase(event.job);
-      emit(JobSuccess(jobs: await getJobsUsecase()));
+      await getMultipleJobByStatus(emit);
     } catch (e) {
       emit(JobError(message: e.toString()));
     }
@@ -52,26 +52,27 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     }
   }
 
-  Future<void> getJobByStatus(String status, Emitter<JobState> emit) async {
-    emit(JobLoading());
-    try {
-      final jobs = await getJobByStatusUseCase(status);
+  // Future<void> getJobByStatus(
+  //     List<String> status, Emitter<JobState> emit) async {
+  //   emit(JobLoading());
+  //   try {
+  //     final jobs = await getJobByStatusUseCase(status);
 
-      if (jobs.isEmpty) {
-        emit(JobIsEmpty());
-        return;
-      }
-      emit(JobSuccess(jobs: jobs));
-    } catch (e) {
-      emit(JobError(message: e.toString()));
-    }
-  }
+  //     if (jobs.isEmpty) {
+  //       emit(JobIsEmpty());
+  //       return;
+  //     }
+  //     emit(JobSuccess(jobs: jobs));
+  //   } catch (e) {
+  //     emit(JobError(message: e.toString()));
+  //   }
+  // }
 
   Future<void> updateJob(UpdateJobEvent event, Emitter<JobState> emit) async {
     emit(JobLoading());
     try {
       await updateJobUsecase(event.id, event.job);
-      emit(JobSuccess(jobs: await getJobsUsecase()));
+      await getMultipleJobByStatus(emit);
     } catch (e) {
       emit(JobError(message: e.toString()));
     }
@@ -81,12 +82,22 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     emit(JobLoading());
     try {
       await deleteJobUsecase(id);
-      final jobs = await getJobsUsecase();
-      if (jobs.isEmpty) {
-        emit(JobIsEmpty());
-        return;
-      }
-      emit(JobSuccess(jobs: jobs));
+      await getMultipleJobByStatus(emit);
+    } catch (e) {
+      emit(JobError(message: e.toString()));
+    }
+  }
+
+  Future<void> getMultipleJobByStatus(Emitter<JobState> emit) async {
+    emit(JobLoading());
+    try {
+      final todoJobs = await getJobByStatusUseCase('todo');
+      final inProgressJobs = await getJobByStatusUseCase('inProgress');
+      final doneJobs = await getJobByStatusUseCase('done');
+      emit(JobMultiStatusSuccess(
+          todoJobs: todoJobs,
+          inProgressJobs: inProgressJobs,
+          doneJobs: doneJobs));
     } catch (e) {
       emit(JobError(message: e.toString()));
     }

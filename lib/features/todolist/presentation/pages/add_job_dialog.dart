@@ -112,7 +112,6 @@ Map<String, dynamic> priorityMapText = {
 Map<String, dynamic> statusMap = {
   'todo': JobStatus.todo,
   'inProgress': JobStatus.inProgress,
-  'pending': JobStatus.pending,
   'done': JobStatus.done
 };
 

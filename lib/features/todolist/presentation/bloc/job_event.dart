@@ -14,9 +14,11 @@ class GetJobsEvent extends JobEvent {
 }
 
 class GetJobByStatusEvent extends JobEvent {
-  final String status;
-  GetJobByStatusEvent({required this.status});
+  final List<String> statuses;
+  GetJobByStatusEvent({required this.statuses});
 }
+
+class GetJobByMultipleStatusEvent extends JobEvent {}
 
 class UpdateJobEvent extends JobEvent {
   final int id;
