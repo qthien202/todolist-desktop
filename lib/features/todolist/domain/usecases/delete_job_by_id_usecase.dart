@@ -3,5 +3,5 @@ import 'package:app_todolist_desktop/features/todolist/domain/repositories/todol
 class DeleteJobByIdUsecase {
   final TodolistRepository repository;
   DeleteJobByIdUsecase(this.repository);
-  Future<void> call(String id) async => await repository.deleteJobById(id);
+  Future<void> call(int id) async => await repository.deleteJobById(id);
 }

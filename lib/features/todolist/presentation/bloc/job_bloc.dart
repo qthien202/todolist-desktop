@@ -57,11 +57,16 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     }
   }
 
-  Future<void> deleteJob(String id, Emitter<JobState> emit) async {
+  Future<void> deleteJob(int id, Emitter<JobState> emit) async {
     emit(JobLoading());
     try {
       await deleteJobUsecase(id);
-      emit(JobSuccess(jobs: await getJobsUsecase()));
+      final jobs = await getJobsUsecase();
+      if (jobs.isEmpty) {
+        emit(JobIsEmpty());
+        return;
+      }
+      emit(JobSuccess(jobs: jobs));
     } catch (e) {
       emit(JobError(message: e.toString()));
     }

@@ -71,7 +71,6 @@ Widget addJobDialog(
       // Nút Lưu
       ElevatedButton(
         onPressed: () {
-          print(">>>>>>>>id: $id");
           if (formKey.currentState?.validate() == true) {
             if (id != null) {
               final newJob = JobModel(
@@ -81,13 +80,14 @@ Widget addJobDialog(
                   priority: selectedPriority.name);
               context.read<JobBloc>().add(UpdateJobEvent(job: newJob, id: id));
               Navigator.pop(context);
+            } else {
+              context.read<JobBloc>().add(AddJobEvent(
+                  job: JobModel(
+                      name: nameController.text,
+                      status: selectedStatus.name,
+                      priority: selectedPriority.name)));
+              Navigator.pop(context);
             }
-            // context.read<JobBloc>().add(AddJobEvent(
-            //     job: JobModel(
-            //         name: nameController.text,
-            //         status: selectedStatus.name,
-            //         priority: selectedPriority.name)));
-            // Navigator.pop(context);
           }
         },
         child: Text("Lưu"),

@@ -1,6 +1,11 @@
 import 'package:app_todolist_desktop/features/todolist/domain/entities/job_entity.dart';
+import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_bloc.dart';
+import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_event.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/pages/add_job_dialog.dart';
+import 'package:app_todolist_desktop/features/todolist/presentation/widgets/confirm_dialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 Widget jobWidget(JobEntity job, BuildContext context) {
   Map<String, dynamic> statusMap = {
@@ -32,10 +37,29 @@ Widget jobWidget(JobEntity job, BuildContext context) {
                 job.name,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
-              InkWell(
-                  onTap: () => showAddJobDialog(
-                      context: context, job: job, isEdit: true),
-                  child: Icon(Icons.edit_outlined))
+              Row(
+                children: [
+                  InkWell(
+                      onTap: () => showAddJobDialog(
+                          context: context, job: job, isEdit: true),
+                      child: Icon(Icons.edit_outlined)),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  InkWell(
+                      onTap: () => showCupertinoDialog(
+                            context: context,
+                            builder: (context) =>
+                                confirmDialog(context, onDelete: () {
+                              context
+                                  .read<JobBloc>()
+                                  .add(DeleteJobByIdEvent(id: job.id ?? 0));
+                              Navigator.pop(context);
+                            }),
+                          ),
+                      child: Icon(Icons.delete))
+                ],
+              )
             ],
           ),
           Text(statusMap[job.status]),

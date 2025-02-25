@@ -20,6 +20,6 @@ class UpdateJobEvent extends JobEvent {
 }
 
 class DeleteJobByIdEvent extends JobEvent {
-  final String id;
+  final int id;
   DeleteJobByIdEvent({required this.id});
 }

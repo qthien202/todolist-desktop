@@ -49,7 +49,7 @@ class TodolistLocalDataSourceImpl implements TodolistLocalDataSource {
   }
 
   @override
-  Future<void> deleteJobById(String id) async {
+  Future<void> deleteJobById(int id) async {
     final db = await database;
     await db.delete(tableName, where: 'id = ?', whereArgs: [id]);
   }
