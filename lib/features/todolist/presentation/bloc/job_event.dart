@@ -30,3 +30,11 @@ class DeleteJobByIdEvent extends JobEvent {
   final int id;
   DeleteJobByIdEvent({required this.id});
 }
+
+class UpdateJobPositionEvent extends JobEvent {
+  final int oldIndex;
+  final int newIndex;
+  final String status;
+  UpdateJobPositionEvent(
+      {required this.oldIndex, required this.newIndex, required this.status});
+}

@@ -12,13 +12,6 @@ Widget jobDragAndDrop(
   return DragTarget<JobEntity>(
     onAcceptWithDetails: (details) {
       final job = details.data;
-      // print(">>>>>status: ${job.status}");
-      // final dx = details.offset.dx;
-      // final dy = details.offset.dx;
-      // final distance = details.offset.distance;
-      // print(">>>>>>>dx: $dx");
-      // print(">>>>>>>dy: $dy");
-      // print(">>>>>>>distance: $distance");
       context.read<JobBloc>().add(UpdateJobEvent(
           id: job.id ?? 0,
           job: JobEntity(
@@ -26,16 +19,6 @@ Widget jobDragAndDrop(
               name: job.name,
               priority: job.priority,
               status: status.name)));
-    },
-    onMove: (details) {
-      final job = details.data;
-      print(">>>>>status: ${job.status}");
-      final dx = details.offset.dx;
-      final dy = details.offset.dx;
-      final distance = details.offset.distance;
-      print(">>>>>>>dx: $dx");
-      print(">>>>>>>dy: $dy");
-      print(">>>>>>>distance: $distance");
     },
     builder: (context, candidateData, rejectedData) {
       return jobStatusWidget(

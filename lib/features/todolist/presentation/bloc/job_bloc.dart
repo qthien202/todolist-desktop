@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:ui';
 
+import 'package:app_todolist_desktop/features/todolist/domain/entities/job_entity.dart';
 import 'package:app_todolist_desktop/features/todolist/domain/usecases/get_job_by_status_usecase.dart';
 import 'package:app_todolist_desktop/features/todolist/domain/usecases/job_usecases.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_event.dart';
@@ -25,6 +27,7 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     on<DeleteJobByIdEvent>((event, emit) => deleteJob(event.id, emit));
     on<GetJobByMultipleStatusEvent>(
         (event, emit) => getMultipleJobByStatus(emit));
+    on<UpdateJobPositionEvent>((event, emit) {});
   }
 
   Future<void> addJob(AddJobEvent event, Emitter<JobState> emit) async {
@@ -94,6 +97,7 @@ class JobBloc extends Bloc<JobEvent, JobState> {
       final todoJobs = await getJobByStatusUseCase('todo');
       final inProgressJobs = await getJobByStatusUseCase('inProgress');
       final doneJobs = await getJobByStatusUseCase('done');
+      print(">>>>>>>todoJobs: ${jsonEncode(todoJobs)}");
       emit(JobMultiStatusSuccess(
           todoJobs: todoJobs,
           inProgressJobs: inProgressJobs,
@@ -102,4 +106,40 @@ class JobBloc extends Bloc<JobEvent, JobState> {
       emit(JobError(message: e.toString()));
     }
   }
+
+  Future<void> updateJobPosition(
+      UpdateJobPositionEvent event, Emitter<JobState> emit) async {
+    final todoJobs = await getJobByStatusUseCase('todo');
+    final inProgressJobs = await getJobByStatusUseCase('inProgress');
+    final doneJobs = await getJobByStatusUseCase('done');
+
+    List<JobEntity> targets;
+    switch (event.status) {
+      case "todo":
+        targets = todoJobs;
+        break;
+      case "inProgress":
+        targets = inProgressJobs;
+        break;
+      case "done":
+        targets = doneJobs;
+        break;
+      default:
+        return;
+    }
+
+    final job = targets.removeAt(event.oldIndex);
+    targets.insert(event.newIndex, job);
+    emit(JobMultiStatusSuccess(
+        todoJobs: todoJobs,
+        inProgressJobs: inProgressJobs,
+        doneJobs: doneJobs));
+  }
+
+  // List getJobsByStatus(String status) {
+  //   switch(status){
+  //     case "todo":
+  //     return to
+  //   }
+  // }
 }
