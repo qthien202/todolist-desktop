@@ -1,5 +1,6 @@
 import 'package:app_todolist_desktop/features/todolist/domain/entities/job_entity.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_bloc.dart';
+import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_event.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_state.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/pages/add_job_dialog.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/widgets/job_status_widget.dart';
@@ -58,10 +59,12 @@ class HomePage extends StatelessWidget {
               ),
             );
           }
-          final todoJobs = state is JobMultiStatusSuccess ? state.todoJobs : [];
-          final inProgressJobs =
+          List<JobEntity> todoJobs =
+              state is JobMultiStatusSuccess ? state.todoJobs : [];
+          List<JobEntity> inProgressJobs =
               state is JobMultiStatusSuccess ? state.inProgressJobs : [];
-          final doneJobs = state is JobMultiStatusSuccess ? state.doneJobs : [];
+          List<JobEntity> doneJobs =
+              state is JobMultiStatusSuccess ? state.doneJobs : [];
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
             child: SingleChildScrollView(
@@ -69,39 +72,86 @@ class HomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  jobStatusWidget(
-                    context: context,
-                    status: JobStatus.todo.name,
-                    child: Column(
-                      children: todoJobs.map((job) {
-                        return jobWidget(job, context);
-                      }).toList(),
-                    ),
-                  ),
-                  jobStatusWidget(
-                    context: context,
-                    status: JobStatus.inProgress.name,
-                    child: Column(
-                      children: inProgressJobs.map((job) {
-                        return jobWidget(job, context);
-                      }).toList(),
-                    ),
-                  ),
-                  jobStatusWidget(
-                    context: context,
-                    status: JobStatus.done.name,
-                    child: Column(
-                      children: doneJobs.map((job) {
-                        return jobWidget(job, context);
-                      }).toList(),
-                    ),
-                  )
+                  jobDragAndDrop(context, JobStatus.todo, todoJobs),
+                  jobDragAndDrop(context, JobStatus.inProgress, inProgressJobs),
+                  jobDragAndDrop(context, JobStatus.done, doneJobs),
                 ],
               ),
             ),
           );
         },
       ),
+    );
+  }
+
+  Widget jobDragAndDrop(
+      BuildContext context, JobStatus status, List<JobEntity> jobs) {
+    return DragTarget<JobEntity>(
+      onAcceptWithDetails: (details) {
+        final job = details.data;
+        print(">>>>>status: ${job.status}");
+        context.read<JobBloc>().add(UpdateJobEvent(
+            id: job.id ?? 0,
+            job: JobEntity(
+                id: job.id ?? 0,
+                name: job.name,
+                priority: job.priority,
+                status: status.name)));
+      },
+
+      // onWillAcceptWithDetails: (details) {
+      //   final job = details.data;
+      //   context.read<JobBloc>().add(UpdateJobEvent(
+      //       id: job.id ?? 0,
+      //       job: JobEntity(
+      //           id: job.id ?? 0,
+      //           name: job.name,
+      //           priority: job.priority,
+      //           status: status.name)));
+      //   return true;
+      // },
+      // onMove: (details) {
+      //   final job = details.data;
+      //   print(">>>>>status: ${job.status}");
+      //   context.read<JobBloc>().add(UpdateJobEvent(
+      //       id: job.id ?? 0,
+      //       job: JobEntity(
+      //           id: job.id ?? 0,
+      //           name: job.name,
+      //           priority: job.priority,
+      //           status: status.name)));
+      // },
+      builder: (context, candidateData, rejectedData) {
+        return jobStatusWidget(
+          jobs: jobs,
+          context: context,
+          status: status.name,
+          child: Column(
+            children: jobs.map((job) {
+              return Draggable(
+                  // onDragUpdate: (details) {
+                  //   final dx = details.globalPosition.dx;
+                  //   final dy = details.globalPosition.dy;
+
+                  //   if (dx < 300) {
+                  //     // Ví dụ: nếu công việc kéo gần vùng "Chưa thực hiện"
+                  //     print("Công việc đang gần vùng 'Chưa thực hiện'");
+                  //     context.read<JobBloc>().add(UpdateJobEvent(
+                  //         id: job.id ?? 0,
+                  //         job: JobEntity(
+                  //             id: job.id ?? 0,
+                  //             name: job.name,
+                  //             priority: job.priority,
+                  //             status: JobStatus.todo.name)));
+                  //   }
+                  // },
+                  data: job,
+                  feedback: jobWidget(job, context),
+                  child: jobWidget(job, context));
+            }).toList(),
+          ),
+        );
+      },
     );
   }
 }
