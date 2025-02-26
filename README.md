@@ -12,7 +12,7 @@ Hướng dẫn build ứng dụng Flutter trên **Windows, macOS và Linux**.
 flutter build windows
 ```
 
-File .exe tại: build\windows\runner\Release\
+File .exe tại: "build\windows\runner\Release\"
 
 ### 🍎 macos
 
@@ -20,12 +20,25 @@ File .exe tại: build\windows\runner\Release\
 flutter build macos
 ```
 
-Ứng dụng macos tại: build/macos/Build/Products/Release/
+Sau khi build xong, ứng dụng .app sẽ nằm trong thư mục: "build/macos/Build/Products/Release/MyApp.app"
 
+<br>Cài đặt create-dmg</br>
+```sh
+npm install -g create-dmg
+```
+Chạy lệnh sau để tạo file .dmg
+```sh
+create-dmg \
+  "build/macos/Build/Products/Release/MyApp.app" \
+  --dmg-title="MyApp" \
+  --overwrite \
+  --output "build/macos/Build/Products/Release/"
+```
+output: là nơi lưu trữ file .dmg
 ### 🐧 Linux
 
 ```sh
 flutter build linux
 ```
 
-Ứng dụng sau khi build nằm tại: build/linux/x64/release/bundle/
+Ứng dụng sau khi build nằm tại: "build/linux/x64/release/bundle/"
