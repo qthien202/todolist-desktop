@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:app_todolist_desktop/extensions/swap.dart';
 import 'package:app_todolist_desktop/features/todolist/domain/entities/job_entity.dart';
 import 'package:app_todolist_desktop/features/todolist/domain/usecases/get_job_by_status_usecase.dart';
 import 'package:app_todolist_desktop/features/todolist/domain/usecases/job_usecases.dart';
@@ -132,9 +133,8 @@ class JobBloc extends Bloc<JobEvent, JobState> {
         event.newIndex >= targets.length) {
       return;
     }
-    targets.removeAt(event.oldIndex);
-
-    print(">>>>>>>targets: $targets");
+    targets.swap(event.oldIndex, event.newIndex);
+    print(">>>>>>targets: $targets");
     emit(JobMultiStatusSuccess(
         todoJobs: todoJobs,
         inProgressJobs: inProgressJobs,

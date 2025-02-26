@@ -32,16 +32,24 @@ Widget jobDragAndDrop(
               return DragTarget<JobEntity>(
                 onAcceptWithDetails: (details) {
                   final oldIndex = jobs.indexOf(details.data);
-                  // print(">>>>>>>>oldIndex: $oldIndex");
-                  // print(">>>>>>>>>>newIndex: $index");
-                  final jobDrag = details.data;
-                  print(">>>>>>>>>>>>>>>>jobDrag: $jobDrag");
-                  // if (oldIndex != -1 && oldIndex != index) {
-                  context.read<JobBloc>().add(UpdateJobPositionEvent(
-                      oldIndex: oldIndex,
-                      newIndex: index,
-                      status: status.name,
-                      job: details.data));
+
+                  final dropJob = details.data;
+                  if (jobs.contains(dropJob)) {
+                    context.read<JobBloc>().add(UpdateJobPositionEvent(
+                        oldIndex: oldIndex,
+                        newIndex: index,
+                        status: status.name,
+                        job: dropJob));
+                    return;
+                  }
+                  context.read<JobBloc>().add(UpdateJobEvent(
+                      id: dropJob.id ?? 0,
+                      job: JobEntity(
+                          id: dropJob.id ?? 0,
+                          name: dropJob.name,
+                          priority: dropJob.priority,
+                          status: status.name)));
+
                   // }
                 },
                 builder: (context, candidateData, rejectedData) {
