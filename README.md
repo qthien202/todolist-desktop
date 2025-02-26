@@ -1,16 +1,31 @@
-# app_todolist_desktop
+# 🚀 Release Flutter Desktop App
 
-A new Flutter project.
+Hướng dẫn build ứng dụng Flutter trên **Windows, macOS và Linux**.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 📦 Build ứng dụng
 
-A few resources to get you started if this is your first Flutter project:
+### 🔹 Windows
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```sh
+flutter build windows
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+File .exe tại: build\windows\runner\Release\
+
+### 🍎 macos
+
+```sh
+flutter build macos
+```
+
+Ứng dụng macos tại: build/macos/Build/Products/Release/
+
+### 🐧 Linux
+
+```sh
+flutter build linux
+```
+
+Ứng dụng sau khi build nằm tại: build/linux/x64/release/bundle/
