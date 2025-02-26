@@ -12,7 +12,13 @@ Widget jobDragAndDrop(
   return DragTarget<JobEntity>(
     onAcceptWithDetails: (details) {
       final job = details.data;
-      print(">>>>>status: ${job.status}");
+      // print(">>>>>status: ${job.status}");
+      // final dx = details.offset.dx;
+      // final dy = details.offset.dx;
+      // final distance = details.offset.distance;
+      // print(">>>>>>>dx: $dx");
+      // print(">>>>>>>dy: $dy");
+      // print(">>>>>>>distance: $distance");
       context.read<JobBloc>().add(UpdateJobEvent(
           id: job.id ?? 0,
           job: JobEntity(
@@ -21,29 +27,16 @@ Widget jobDragAndDrop(
               priority: job.priority,
               status: status.name)));
     },
-
-    // onWillAcceptWithDetails: (details) {
-    //   final job = details.data;
-    //   context.read<JobBloc>().add(UpdateJobEvent(
-    //       id: job.id ?? 0,
-    //       job: JobEntity(
-    //           id: job.id ?? 0,
-    //           name: job.name,
-    //           priority: job.priority,
-    //           status: status.name)));
-    //   return true;
-    // },
-    // onMove: (details) {
-    //   final job = details.data;
-    //   print(">>>>>status: ${job.status}");
-    //   context.read<JobBloc>().add(UpdateJobEvent(
-    //       id: job.id ?? 0,
-    //       job: JobEntity(
-    //           id: job.id ?? 0,
-    //           name: job.name,
-    //           priority: job.priority,
-    //           status: status.name)));
-    // },
+    onMove: (details) {
+      final job = details.data;
+      print(">>>>>status: ${job.status}");
+      final dx = details.offset.dx;
+      final dy = details.offset.dx;
+      final distance = details.offset.distance;
+      print(">>>>>>>dx: $dx");
+      print(">>>>>>>dy: $dy");
+      print(">>>>>>>distance: $distance");
+    },
     builder: (context, candidateData, rejectedData) {
       return jobStatusWidget(
         jobs: jobs,
@@ -52,24 +45,8 @@ Widget jobDragAndDrop(
         child: Column(
           children: jobs.map((job) {
             return Draggable(
-                // onDragUpdate: (details) {
-                //   final dx = details.globalPosition.dx;
-                //   final dy = details.globalPosition.dy;
-
-                //   if (dx < 300) {
-                //     // Ví dụ: nếu công việc kéo gần vùng "Chưa thực hiện"
-                //     print("Công việc đang gần vùng 'Chưa thực hiện'");
-                //     context.read<JobBloc>().add(UpdateJobEvent(
-                //         id: job.id ?? 0,
-                //         job: JobEntity(
-                //             id: job.id ?? 0,
-                //             name: job.name,
-                //             priority: job.priority,
-                //             status: JobStatus.todo.name)));
-                //   }
-                // },
                 data: job,
-                feedback: jobWidget(job, context),
+                feedback: Opacity(opacity: 0.5, child: jobWidget(job, context)),
                 child: jobWidget(job, context));
           }).toList(),
         ),

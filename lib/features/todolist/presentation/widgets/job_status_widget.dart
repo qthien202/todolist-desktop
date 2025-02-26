@@ -25,61 +25,70 @@ Widget jobStatusWidget(
     'done': 'Hoàn thành'
   };
 
-  return Visibility(
-    visible: jobs.isNotEmpty,
-    replacement: Container(
-      height: MediaQuery.of(context).size.height * .5,
-      width: MediaQuery.of(context).size.width * .2,
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-          color: jobs.isEmpty ? Colors.transparent : Colors.grey.shade100,
-          borderRadius: BorderRadius.circular(8)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+  return Container(
+    height: MediaQuery.of(context).size.height,
+    color: Colors.transparent,
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Visibility(
+          visible: jobs.isNotEmpty,
+          replacement: Container(
+            height: MediaQuery.of(context).size.height * .5,
+            width: MediaQuery.of(context).size.width * .2,
+            padding: EdgeInsets.all(8),
             decoration: BoxDecoration(
-                color: badgeColor[status],
-                borderRadius: BorderRadius.circular(20)),
-            child: Text(
-              statusTextMap[status],
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+                color: jobs.isEmpty ? Colors.transparent : Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(8)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  decoration: BoxDecoration(
+                      color: badgeColor[status],
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Text(
+                    statusTextMap[status],
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w600),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                child
+              ],
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          child
-        ],
-      ),
-    ),
-    child: Container(
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-          color: jobs.isEmpty ? Colors.transparent : Colors.grey.shade100,
-          borderRadius: BorderRadius.circular(8)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          child: Container(
+            padding: EdgeInsets.all(8),
             decoration: BoxDecoration(
-                color: badgeColor[status],
-                borderRadius: BorderRadius.circular(20)),
-            child: Text(
-              statusTextMap[status],
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+                color: jobs.isEmpty ? Colors.transparent : Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(8)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  decoration: BoxDecoration(
+                      color: badgeColor[status],
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Text(
+                    statusTextMap[status],
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w600),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                child
+              ],
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          child
-        ],
-      ),
+        ),
+      ],
     ),
   );
 }
