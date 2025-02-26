@@ -37,10 +37,6 @@ class HomePage extends StatelessWidget {
       ),
       body: BlocBuilder<JobBloc, JobState>(
         builder: (context, state) {
-          if (kDebugMode) {
-            print(">>>>>>>>state2: $state");
-          }
-
           if (state is JobLoading) {
             return CircularProgressIndicator();
           }

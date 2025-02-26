@@ -22,18 +22,41 @@ Widget jobDragAndDrop(
     },
     builder: (context, candidateData, rejectedData) {
       return jobStatusWidget(
-        jobs: jobs,
-        context: context,
-        status: status.name,
-        child: Column(
-          children: jobs.map((job) {
-            return Draggable(
-                data: job,
-                feedback: Opacity(opacity: 0.5, child: jobWidget(job, context)),
-                child: jobWidget(job, context));
-          }).toList(),
-        ),
-      );
+          jobs: jobs,
+          context: context,
+          status: status.name,
+          child: Column(
+            children: jobs.asMap().entries.map((entry) {
+              final index = entry.key;
+              final job = entry.value;
+              return DragTarget<JobEntity>(
+                onAcceptWithDetails: (details) {
+                  final oldIndex = jobs.indexOf(details.data);
+                  // print(">>>>>>>>oldIndex: $oldIndex");
+                  // print(">>>>>>>>>>newIndex: $index");
+                  final jobDrag = details.data;
+                  print(">>>>>>>>>>>>>>>>jobDrag: $jobDrag");
+                  // if (oldIndex != -1 && oldIndex != index) {
+                  context.read<JobBloc>().add(UpdateJobPositionEvent(
+                      oldIndex: oldIndex,
+                      newIndex: index,
+                      status: status.name,
+                      job: details.data));
+                  // }
+                },
+                builder: (context, candidateData, rejectedData) {
+                  return Draggable(
+                      onDragEnd: (details) {
+                        print(">>>>>>jobs: $jobs");
+                      },
+                      data: job,
+                      feedback:
+                          Opacity(opacity: 0.5, child: jobWidget(job, context)),
+                      child: jobWidget(job, context));
+                },
+              );
+            }).toList(),
+          ));
     },
   );
 }

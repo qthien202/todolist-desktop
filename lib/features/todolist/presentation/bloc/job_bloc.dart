@@ -27,7 +27,7 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     on<DeleteJobByIdEvent>((event, emit) => deleteJob(event.id, emit));
     on<GetJobByMultipleStatusEvent>(
         (event, emit) => getMultipleJobByStatus(emit));
-    on<UpdateJobPositionEvent>((event, emit) {});
+    on<UpdateJobPositionEvent>((event, emit) => updateJobPosition(event, emit));
   }
 
   Future<void> addJob(AddJobEvent event, Emitter<JobState> emit) async {
@@ -97,7 +97,6 @@ class JobBloc extends Bloc<JobEvent, JobState> {
       final todoJobs = await getJobByStatusUseCase('todo');
       final inProgressJobs = await getJobByStatusUseCase('inProgress');
       final doneJobs = await getJobByStatusUseCase('done');
-      print(">>>>>>>todoJobs: ${jsonEncode(todoJobs)}");
       emit(JobMultiStatusSuccess(
           todoJobs: todoJobs,
           inProgressJobs: inProgressJobs,
@@ -127,19 +126,18 @@ class JobBloc extends Bloc<JobEvent, JobState> {
       default:
         return;
     }
+    if (event.oldIndex < 0 ||
+        event.newIndex < 0 ||
+        event.oldIndex >= targets.length ||
+        event.newIndex >= targets.length) {
+      return;
+    }
+    targets.removeAt(event.oldIndex);
 
-    final job = targets.removeAt(event.oldIndex);
-    targets.insert(event.newIndex, job);
+    print(">>>>>>>targets: $targets");
     emit(JobMultiStatusSuccess(
         todoJobs: todoJobs,
         inProgressJobs: inProgressJobs,
         doneJobs: doneJobs));
   }
-
-  // List getJobsByStatus(String status) {
-  //   switch(status){
-  //     case "todo":
-  //     return to
-  //   }
-  // }
 }

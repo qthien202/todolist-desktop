@@ -35,6 +35,10 @@ class UpdateJobPositionEvent extends JobEvent {
   final int oldIndex;
   final int newIndex;
   final String status;
+  final JobEntity job;
   UpdateJobPositionEvent(
-      {required this.oldIndex, required this.newIndex, required this.status});
+      {required this.oldIndex,
+      required this.newIndex,
+      required this.status,
+      required this.job});
 }
