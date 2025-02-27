@@ -42,6 +42,7 @@ dependencies:
   get_it: ^8.0.3
   sqflite_common_ffi: ^2.3.4+4
   window_manager: ^0.4.3
+  sqlite3_flutter_libs: ^0.5.31
 
 dev_dependencies:
   flutter_test:

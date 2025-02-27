@@ -1,6 +1,9 @@
 import 'package:app_todolist_desktop/features/todolist/data/data_sources/todolist_local_data_source.dart';
 import 'package:app_todolist_desktop/features/todolist/data/models/job.dart';
+import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'dart:io';
+import 'package:path/path.dart';
 
 class TodolistLocalDataSourceImpl implements TodolistLocalDataSource {
   static const databaseName = "todolist_db";
@@ -10,7 +13,17 @@ class TodolistLocalDataSourceImpl implements TodolistLocalDataSource {
   Future<Database> get database async => _db ??= await initDB();
 
   Future<Database> initDB() async {
-    final dbPath = await databaseFactory.getDatabasesPath();
+    final programDataPath = Directory('C:\\ProgramData\\TodoList');
+
+    if (!programDataPath.existsSync()) {
+      programDataPath.createSync(recursive: true);
+    }
+
+    final dbPath = join(programDataPath.path, databaseName);
+    if (kDebugMode) {
+      print("Database path: $dbPath");
+    } // Kiểm tra đường dẫn
+
     final inMemoryDatabasePath = '$dbPath/$databaseName';
     _db = await databaseFactory.openDatabase(inMemoryDatabasePath);
     await _db?.execute('''
