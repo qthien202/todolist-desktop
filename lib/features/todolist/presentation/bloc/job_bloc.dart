@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:app_todolist_desktop/extensions/swap.dart';
 import 'package:app_todolist_desktop/features/todolist/domain/entities/job_entity.dart';
+import 'package:app_todolist_desktop/features/todolist/domain/usecases/delete_job_by_status_usecase.dart';
 import 'package:app_todolist_desktop/features/todolist/domain/usecases/get_job_by_status_usecase.dart';
 import 'package:app_todolist_desktop/features/todolist/domain/usecases/job_usecases.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_event.dart';
@@ -15,12 +16,14 @@ class JobBloc extends Bloc<JobEvent, JobState> {
   final UpdateJobByIdUsecase updateJobUsecase;
   final DeleteJobByIdUsecase deleteJobUsecase;
   final GetJobByStatusUseCase getJobByStatusUseCase;
+  final DeleteJobByStatusUseCase deleteJobByStatusUseCase;
   JobBloc(
       {required this.addJobUsecase,
       required this.getJobsUsecase,
       required this.updateJobUsecase,
       required this.deleteJobUsecase,
-      required this.getJobByStatusUseCase})
+      required this.getJobByStatusUseCase,
+      required this.deleteJobByStatusUseCase})
       : super(JobInit()) {
     on<AddJobEvent>((event, emit) => addJob(event, emit));
     on<GetJobsEvent>((event, emit) => getJobs(emit));
@@ -29,6 +32,8 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     on<GetJobByMultipleStatusEvent>(
         (event, emit) => getMultipleJobByStatus(emit));
     on<UpdateJobPositionEvent>((event, emit) => updateJobPosition(event, emit));
+    on<DeleteJobByStatusEvent>(
+        (event, emit) => deleteJobByStatus(event.status, emit));
   }
 
   Future<void> addJob(AddJobEvent event, Emitter<JobState> emit) async {
@@ -139,5 +144,15 @@ class JobBloc extends Bloc<JobEvent, JobState> {
         todoJobs: todoJobs,
         inProgressJobs: inProgressJobs,
         doneJobs: doneJobs));
+  }
+
+  Future<void> deleteJobByStatus(String status, Emitter<JobState> emit) async {
+    emit(JobLoading());
+    try {
+      await deleteJobByStatusUseCase(status);
+      await getMultipleJobByStatus(emit);
+    } catch (e) {
+      emit(JobError(message: e.toString()));
+    }
   }
 }

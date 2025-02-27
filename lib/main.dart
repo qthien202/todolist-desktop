@@ -1,5 +1,6 @@
 import 'package:app_todolist_desktop/core/dependency_injections.dart';
 import 'package:app_todolist_desktop/features/todolist/domain/repositories/todolist_repository.dart';
+import 'package:app_todolist_desktop/features/todolist/domain/usecases/delete_job_by_status_usecase.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_bloc.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
@@ -29,18 +30,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final repository = sl<TodolistRepository>();
     return MultiBlocProvider(
         providers: [
           BlocProvider(
               create: (context) => JobBloc(
-                  getJobsUsecase: GetJobsUsecase(sl<TodolistRepository>()),
-                  addJobUsecase: AddJobUsecase(sl<TodolistRepository>()),
-                  deleteJobUsecase:
-                      DeleteJobByIdUsecase(sl<TodolistRepository>()),
-                  updateJobUsecase:
-                      UpdateJobByIdUsecase(sl<TodolistRepository>()),
-                  getJobByStatusUseCase:
-                      GetJobByStatusUseCase(sl<TodolistRepository>()))
+                  getJobsUsecase: GetJobsUsecase(repository),
+                  addJobUsecase: AddJobUsecase(repository),
+                  deleteJobUsecase: DeleteJobByIdUsecase(repository),
+                  updateJobUsecase: UpdateJobByIdUsecase(repository),
+                  getJobByStatusUseCase: GetJobByStatusUseCase(repository),
+                  deleteJobByStatusUseCase:
+                      DeleteJobByStatusUseCase(repository))
                 ..add(GetJobByMultipleStatusEvent())),
         ],
         child: MaterialApp(

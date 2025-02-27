@@ -42,3 +42,8 @@ class UpdateJobPositionEvent extends JobEvent {
       required this.status,
       required this.job});
 }
+
+class DeleteJobByStatusEvent extends JobEvent {
+  final String status;
+  DeleteJobByStatusEvent({required this.status});
+}
