@@ -75,6 +75,12 @@ class TodolistLocalDataSourceImpl implements TodolistLocalDataSource {
     await db.delete(tableName, where: 'id = ?', whereArgs: [id]);
   }
 
+  @override
+  Future<void> deleteJobByStatus(String status) async {
+    final db = await database;
+    await db.delete(tableName, where: 'status = ?', whereArgs: [status]);
+  }
+
   //sqlflite
 
   // Future<Database> get database async => _database ??= await initDB();

@@ -6,4 +6,5 @@ abstract class TodolistLocalDataSource {
   Future<void> addJob(JobModel job);
   Future<void> deleteJobById(int id);
   Future<void> updateJobById(int id, JobModel job);
+  Future<void> deleteJobByStatus(String status);
 }

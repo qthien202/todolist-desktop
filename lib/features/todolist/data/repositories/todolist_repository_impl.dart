@@ -35,4 +35,8 @@ class TodolistRepositoryImpl implements TodolistRepository {
   @override
   Future<void> deleteJobById(int id) async =>
       await todolistLocalDataSource.deleteJobById(id);
+
+  @override
+  Future<void> deleteJobByStatus(String status) async =>
+      await todolistLocalDataSource.deleteJobByStatus(status);
 }

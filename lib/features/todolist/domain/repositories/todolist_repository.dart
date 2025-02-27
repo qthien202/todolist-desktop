@@ -6,4 +6,5 @@ abstract class TodolistRepository {
   Future<List<JobEntity>> getJobByStatus(String status);
   Future<void> updateJobById(int id, JobEntity job);
   Future<void> deleteJobById(int id);
+  Future<void> deleteJobByStatus(String status);
 }
