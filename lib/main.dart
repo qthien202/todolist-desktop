@@ -12,10 +12,10 @@ import 'features/todolist/presentation/bloc/job_event.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await windowManager.ensureInitialized();
+  // await windowManager.ensureInitialized();
 
   // Đặt kích thước cửa sổ tối thiểu
-  windowManager.setMinimumSize(const Size(880, 400));
+  // windowManager.setMinimumSize(const Size(880, 400));
   sqfliteFfiInit();
   initializeDependencies();
 

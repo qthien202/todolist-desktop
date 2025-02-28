@@ -4,11 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'dart:io';
 import 'package:path/path.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 class TodolistLocalDataSourceImpl implements TodolistLocalDataSource {
   static const databaseName = "todolist_db";
   static const tableName = "todos";
-  var databaseFactory = databaseFactoryFfi;
+
+  var databaseFactory = kIsWeb ? databaseFactoryFfiWeb : databaseFactoryFfi;
   static Database? _db;
   Future<Database> get database async => _db ??= await initDB();
 
