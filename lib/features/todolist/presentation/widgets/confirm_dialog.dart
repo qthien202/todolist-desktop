@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Widget confirmDialog(BuildContext context, {void Function()? onDelete}) {
+Widget confirmDialog(BuildContext context,
+    {void Function()? onDelete,
+    String title = "Bạn có chắc muốn xóa công việc này không?"}) {
   return CupertinoAlertDialog(
-    title: Text("Bạn có chắc muốn xóa công việc này không?"),
+    title: Text(title),
     actions: [
       CupertinoDialogAction(
         onPressed: () => Navigator.pop(context),

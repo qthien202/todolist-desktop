@@ -2,7 +2,6 @@ import 'package:app_todolist_desktop/features/todolist/domain/entities/job_entit
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_bloc.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/bloc/job_state.dart';
 import 'package:app_todolist_desktop/features/todolist/presentation/pages/add_job_dialog.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -35,46 +34,50 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocBuilder<JobBloc, JobState>(
-        builder: (context, state) {
-          if (state is JobLoading) {
-            return CircularProgressIndicator();
-          }
+      body: ListView(
+        children: [
+          BlocBuilder<JobBloc, JobState>(
+            builder: (context, state) {
+              if (state is JobLoading) {
+                return CircularProgressIndicator();
+              }
 
-          if (state is JobIsEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Không có công việc nào",
-                    style: TextStyle(color: Colors.black),
+              if (state is JobIsEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Không có công việc nào",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            );
-          }
-          List<JobEntity> todoJobs =
-              state is JobMultiStatusSuccess ? state.todoJobs : [];
-          List<JobEntity> inProgressJobs =
-              state is JobMultiStatusSuccess ? state.inProgressJobs : [];
-          List<JobEntity> doneJobs =
-              state is JobMultiStatusSuccess ? state.doneJobs : [];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
-            child: SingleChildScrollView(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  jobDragAndDrop(context, JobStatus.todo, todoJobs),
-                  jobDragAndDrop(context, JobStatus.inProgress, inProgressJobs),
-                  jobDragAndDrop(context, JobStatus.done, doneJobs),
-                ],
-              ),
-            ),
-          );
-        },
+                );
+              }
+              List<JobEntity> todoJobs =
+                  state is JobMultiStatusSuccess ? state.todoJobs : [];
+              List<JobEntity> inProgressJobs =
+                  state is JobMultiStatusSuccess ? state.inProgressJobs : [];
+              List<JobEntity> doneJobs =
+                  state is JobMultiStatusSuccess ? state.doneJobs : [];
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    jobDragAndDrop(context, JobStatus.todo, todoJobs),
+                    jobDragAndDrop(
+                        context, JobStatus.inProgress, inProgressJobs),
+                    jobDragAndDrop(context, JobStatus.done, doneJobs),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

@@ -26,7 +26,7 @@ Widget jobStatusWidget(
   };
 
   return Container(
-    height: MediaQuery.of(context).size.height,
+    // height: MediaQuery.of(context).size.height,
     color: Colors.transparent,
     child: Column(
       mainAxisSize: MainAxisSize.min,
@@ -62,23 +62,59 @@ Widget jobStatusWidget(
             ),
           ),
           child: Container(
+            constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * .2),
             padding: EdgeInsets.all(8),
             decoration: BoxDecoration(
                 color: jobs.isEmpty ? Colors.transparent : Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(8)),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  decoration: BoxDecoration(
-                      color: badgeColor[status],
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Text(
-                    statusTextMap[status],
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.w600),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      decoration: BoxDecoration(
+                          color: badgeColor[status],
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Text(
+                        statusTextMap[status],
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    Visibility(
+                      visible: jobs.length >= 2,
+                      child: Column(
+                        children: [
+                          InkWell(
+                            child: Icon(
+                              Icons.delete_outline,
+                              color: Colors.red,
+                            ),
+                            onTap: () async {
+                              await showCupertinoDialog(
+                                context: context,
+                                builder: (context) => confirmDialog(
+                                  title:
+                                      "Bạn có chắc muốn xóa nhóm công việc này?",
+                                  context,
+                                  onDelete: () {
+                                    context.read<JobBloc>().add(
+                                        DeleteJobByStatusEvent(status: status));
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
                 const SizedBox(
                   height: 20,
